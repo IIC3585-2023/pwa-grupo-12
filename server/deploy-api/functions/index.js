@@ -126,8 +126,9 @@ app.post('/subscription', async (req, res) => {
 })
 
 // obtenido de https://flaviocopes.com/push-api/#in-the-real-world
-app.post('/push', (req, res) => {
-  let dataToSend = 'data to send';
+app.get('/images', (req, res) => {
+  console.log('Get images')
+  let dataToSend = {title: '¡Bienvenido/a!', body: 'Esto es lo que te perdiste mientras no estabas.'};
   return getSubscriptionsFromDatabase()
   .then((subscriptions) => {
     let promiseChain = Promise.resolve()
