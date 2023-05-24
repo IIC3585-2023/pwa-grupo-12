@@ -1,3 +1,6 @@
+const urlParams = new URLSearchParams(window.location.search);
+const page = urlParams.get('page') || 10;
+
 const APP_SERVER_KEY = 'XXX';
 
 // Check if Service Workers are supported
@@ -74,85 +77,11 @@ const sendToServer = (subscription) => {
 }
 
 const container = document.querySelector(".pin_container");
-const cards = [
-  {
-    size: "card_small",
-    href: "https://i.pinimg.com/564x/be/a6/63/bea66381745b0a1d2c49e04e61b8da22.jpg",
-  },
-  {
-    size: "card_medium",
-    href: "https://i.pinimg.com/564x/09/f0/28/09f028217e4d25a3e12580639fe09dee.jpg",
-  },
-  {
-    size: "card_large",
-    href: "https://i.pinimg.com/564x/f8/15/3c/f8153cced78cf4e42457a9ae45af45da.jpg",
-  },
-  {
-    size: "card_small",
-    href: "https://i.pinimg.com/564x/be/a6/63/bea66381745b0a1d2c49e04e61b8da22.jpg",
-  },
-  {
-    size: "card_medium",
-    href: "https://i.pinimg.com/564x/09/f0/28/09f028217e4d25a3e12580639fe09dee.jpg",
-  },
-  {
-    size: "card_large",
-    href: "https://i.pinimg.com/564x/f8/15/3c/f8153cced78cf4e42457a9ae45af45da.jpg",
-  },
-  {
-    size: "card_small",
-    href: "https://i.pinimg.com/564x/be/a6/63/bea66381745b0a1d2c49e04e61b8da22.jpg",
-  },
-  {
-    size: "card_medium",
-    href: "https://i.pinimg.com/564x/09/f0/28/09f028217e4d25a3e12580639fe09dee.jpg",
-  },
-  {
-    size: "card_large",
-    href: "https://i.pinimg.com/564x/f8/15/3c/f8153cced78cf4e42457a9ae45af45da.jpg",
-  },
-  {
-    size: "card_small",
-    href: "https://i.pinimg.com/564x/be/a6/63/bea66381745b0a1d2c49e04e61b8da22.jpg",
-  },
-  {
-    size: "card_medium",
-    href: "https://i.pinimg.com/564x/09/f0/28/09f028217e4d25a3e12580639fe09dee.jpg",
-  },
-  {
-    size: "card_large",
-    href: "https://i.pinimg.com/564x/f8/15/3c/f8153cced78cf4e42457a9ae45af45da.jpg",
-  },
-  {
-    size: "card_small",
-    href: "https://i.pinimg.com/564x/be/a6/63/bea66381745b0a1d2c49e04e61b8da22.jpg",
-  },
-  {
-    size: "card_medium",
-    href: "https://i.pinimg.com/564x/09/f0/28/09f028217e4d25a3e12580639fe09dee.jpg",
-  },
-  {
-    size: "card_large",
-    href: "https://i.pinimg.com/564x/f8/15/3c/f8153cced78cf4e42457a9ae45af45da.jpg",
-  },
-  {
-    size: "card_small",
-    href: "https://i.pinimg.com/564x/be/a6/63/bea66381745b0a1d2c49e04e61b8da22.jpg",
-  },
-  {
-    size: "card_medium",
-    href: "https://i.pinimg.com/564x/09/f0/28/09f028217e4d25a3e12580639fe09dee.jpg",
-  },
-  {
-    size: "card_large",
-    href: "https://i.pinimg.com/564x/f8/15/3c/f8153cced78cf4e42457a9ae45af45da.jpg",
-  }
-];
 
-const showCards = () => {
+const showCards = (data) => {
   let output = "";
-  cards
-    .sort(() => Math.random() - 0.5)
+  data
+    .sort(() => Math.random() - 0.5).slice(0, page)
     .forEach(
       ({ size, href }) =>
         (output += `
@@ -164,4 +93,13 @@ const showCards = () => {
   container.innerHTML = output;
 };
 
-document.addEventListener("DOMContentLoaded", showCards);
+
+// fetch('https://dummyjson.com/products/1')
+// .then(res => res.json())
+// .then(json => console.log(json))
+
+const data = fetch("img_api.json")
+  .then((response) => response.json())
+  .then((data) =>
+    document.addEventListener("DOMContentLoaded", showCards(data))
+  );

@@ -1,6 +1,6 @@
 self.addEventListener('install', (event) => {
   console.log('Service worker install event!');
-  const precacheResources = ['/', '/index.html', '/app.js', '/style/cards.css', '/style/navbar.css'];
+  const precacheResources = ['/', '/index.html', '/app.js', '/style/cards.css', '/style/navbar.css', '/icons-grey/manifest-icon-512.maskable.png'];
   event.waitUntil(
     caches.open('pinterest-cache')
     .then((cache) => cache.addAll(precacheResources)));
@@ -21,7 +21,12 @@ self.addEventListener('fetch', (event) => {
         return response;
       }).catch(() => {
         // If the network is unavailable, get
-        return cache.match(event.request);
+        return caches.match(event.request).then((response) => {
+          if (!response && event.request.destination === 'image') {
+            return caches.match('icons-grey/manifest-icon-192.maskable.png')
+          }
+          return response;
+        });
       });
     })
   );
