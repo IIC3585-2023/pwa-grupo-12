@@ -28,10 +28,7 @@ if ('serviceWorker' in navigator) {
           const stringSubscription = JSON.stringify(pushSubscription);
           const objSubscription = JSON.parse(stringSubscription);
 
-          console.log('string subscription:', stringSubscription);
-          console.log('obj subscription:', objSubscription);
           sendToServer(JSON.stringify(objSubscription)).then(() => {
-            console.log('fetch');
             fetchImages();
           });
         })
@@ -64,7 +61,6 @@ const askPermission = () => {
 
 const sendToServer = async (subscription) => {
   let reqBody = subscription;
-  console.log("body:", reqBody);
   return fetch('https://iic3585-pwa-c4306.web.app/subscription', {
     method: 'POST',
     headers: {
@@ -110,7 +106,6 @@ const container = document.querySelector(".pin_container");
 //     document.addEventListener("DOMContentLoaded", showCards(data))
 
 const fetchImages = () => {
-  console.log('fetch images');
   fetch("https://iic3585-pwa-c4306.web.app/images")
     .then((response) => response.json())
     .then((data) => console.info(data));

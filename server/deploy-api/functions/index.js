@@ -43,7 +43,6 @@ webpush.setVapidDetails(
 
 // obtenido de https://flaviocopes.com/push-api/#in-the-real-world
 const triggerPush = (subscription, dataToSend) => {
-  console.log(subscription);
   return webpush.sendNotification(subscription, JSON.stringify(dataToSend))
   .catch((err) => {
     if (err.statusCode === 410) {
@@ -63,19 +62,8 @@ const getSubscriptionsFromDatabase = async () => {
 
 // obtenido de https://flaviocopes.com/push-api/#in-the-real-world
 const isValidSaveRequest = (req, res) => {
-  console.log('insValidRequest: req.body, res', req.body);
   body = req.body;
-  console.log('body despues de parse:', body);
   if (!body || !body.endpoint) {
-    if (!body) {
-      console.log('======= no body');
-    }
-    if (!body.endpoint) {
-      console.log('======= no endpoint');
-      
-    }
-    console.log('body', body);
-    console.log('body.endpoint', body.endpoint);
     res.status(400)
     res.setHeader('Content-Type', 'application/json')
     res.send(JSON.stringify({
@@ -84,10 +72,8 @@ const isValidSaveRequest = (req, res) => {
         message: 'Subscription must have an endpoint'
       }
     }))
-    console.log('invalid request');
     return false
   }
-  console.log('valid request1');
   return true
 }
 // obtenido de https://flaviocopes.com/push-api/#in-the-real-world
@@ -101,9 +87,7 @@ app.use(cors());
 
 // routes
 app.get('/test', async (req, res) => {
-  console.log('guardando obj');
   obj = {hola: 1}
-  console.log('leyendo obj');
   const snapshot = await db.collection('users').get();
   snapshot.forEach((doc) => {
     data = doc.data();
@@ -113,15 +97,11 @@ app.get('/test', async (req, res) => {
 
 // obtenido de https://flaviocopes.com/push-api/#in-the-real-world
 app.post('/subscription', async (req, res) => {
-  console.log('/subscription');
-  console.log(req.body);
+
   if (!isValidSaveRequest(req, res)) {
     return
   }
-  console.log('valid request2');
   body = req.body;
-  console.log('body:', body);
-  console.log('=========== req si es valida');
   let subscription = body;
   docRef.set(subscription)
   .then((subscriptionId) => {
@@ -148,7 +128,6 @@ app.post('/subscription', async (req, res) => {
 
 // obtenido de https://flaviocopes.com/push-api/#in-the-real-world
 app.get('/images', (req, res) => {
-  console.log('Get images')
   let dataToSend = {title: '¡Bienvenido/a!', body: 'Esto es lo que te perdiste mientras no estabas.'};
   return getSubscriptionsFromDatabase()
   .then((subscriptions) => {
@@ -156,13 +135,10 @@ app.get('/images', (req, res) => {
     for (let i = 0; i < subscriptions.length; i++) {
       const subscription = subscriptions[i]
       console.log('triggering push for subscriptions:', subscription);
-
       promiseChain = promiseChain.then(() => {
         return triggerPush(subscription, dataToSend)
       })
-      console.log('funciono un triggerPush');
     }
-    console.log('return promiseChain');
     return promiseChain
   })
   .then(() => {

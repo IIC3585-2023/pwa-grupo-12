@@ -36,7 +36,6 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('push', (event) => {
   console.log('Received a push event', event.data.json())
   const data =  event.data.json()
-  console.log(data);
   const promiseChain = self.registration.showNotification(data.title, data)
   event.waitUntil(promiseChain)
 })
