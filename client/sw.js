@@ -16,7 +16,7 @@ self.addEventListener('fetch', (event) => {
     // Open the cache
     caches.open('pinterest-cache').then((cache) => {
       // Go to the network first
-      return fetch(event.request.url).then((response) => {
+      return fetch(event.request.url, { mode: "cors", cache: "default" }).then((response) => {
         cache.put(event.request, response.clone());
         return response;
       }).catch(() => {

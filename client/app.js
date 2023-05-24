@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const page = urlParams.get('page') || 10;
+const page = urlParams.get('page') || 100;
 
 const APP_SERVER_KEY = 'XXX';
 
@@ -78,28 +78,45 @@ const sendToServer = (subscription) => {
 
 const container = document.querySelector(".pin_container");
 
-const showCards = (data) => {
-  let output = "";
-  data
-    .sort(() => Math.random() - 0.5).slice(0, page)
-    .forEach(
-      ({ size, href }) =>
-        (output += `
-               <div class="card ${size}">
-                  <img src=${href} />
-               </div>
-                `)
-    );
-  container.innerHTML = output;
-};
+// const showCards = (data) => {
+//   let output = "";
+//   data
+//     .sort(() => Math.random() - 0.5)
+//     .forEach(
+//       ({ size, href }) =>
+//         (output += `
+//                <div class="card ${size}">
+//                   <img src=${href} />
+//                </div>
+//                 `)
+//     );
+//   container.innerHTML = output;
+// };
+
+// fetch("https://mocki.io/v1/9b37c079-20e2-4168-b469-f00b63a4762e")
+//   .then((response) => response.json())
+//   .then((data) =>
+//     document.addEventListener("DOMContentLoaded", showCards(data))
 
 
-// fetch('https://dummyjson.com/products/1')
-// .then(res => res.json())
-// .then(json => console.log(json))
-
-const data = fetch("img_api.json")
+fetch("https://iic3585-pwa-c4306.web.app/images")
   .then((response) => response.json())
-  .then((data) =>
-    document.addEventListener("DOMContentLoaded", showCards(data))
-  );
+  .then((data) => console.info(data));
+
+const ShowImg = () => {
+
+let output = "";
+for (let i = 0; i < page; i++) {
+  const size = ["card_small", "card_medium", "card_large"].sort(() => Math.random() - 0.5).slice(0, 1);
+  const element = `https://picsum.photos/id/${i}/200/300`;
+  output += `
+               <div class="card ${size}">
+                  <img src=${element} />
+               </div>
+                `;
+  
+}
+container.innerHTML = output;
+}
+
+document.addEventListener("DOMContentLoaded", ShowImg())
