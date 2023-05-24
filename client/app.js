@@ -25,8 +25,15 @@ if ('serviceWorker' in navigator) {
         // Get the PushSubscription object
         .then((pushSubscription) => {
           // Send the PushSubscription object to the server
-          const subscription = JSON.stringify(pushSubscription)
-          sendToServer(subscription)
+          const stringSubscription = JSON.stringify(pushSubscription);
+          const objSubscription = JSON.parse(stringSubscription);
+
+          console.log('string subscription:', stringSubscription);
+          console.log('obj subscription:', objSubscription);
+          sendToServer(JSON.stringify(objSubscription)).then(() => {
+            console.log('fetch');
+            fetchImages();
+          });
         })
       } else {
         console.log('Push Api not supported')
@@ -55,27 +62,29 @@ const askPermission = () => {
   })
 }
 
-const sendToServer = (subscription) => {
-  console.info("body:", subscription);
+const sendToServer = async (subscription) => {
+  let reqBody = subscription;
+  console.log("body:", reqBody);
   return fetch('https://iic3585-pwa-c4306.web.app/subscription', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(subscription)
+    body: reqBody,
+
   })
-  .then((res) => {
-    console.info("res:", res);
-    if (!res.ok) {
-      throw new Error('An error occurred')
-    }
-    return res.json()
-  })
-  .then((resData) => {
-    if (!(resData.data && resData.data.success)) {
-      throw new Error('An error occurred')
-    }
-  })
+  // .then((res) => {
+  //   console.info("res:", res);
+  //   if (!res.ok) {
+  //     throw new Error('An error occurred')
+  //   }
+  //   return res.json()
+  // })
+  // .then((resData) => {
+  //   if (!(resData.data && resData.data.success)) {
+  //     throw new Error('An error occurred')
+  //   }
+  // })
 }
 
 const container = document.querySelector(".pin_container");
@@ -100,25 +109,29 @@ const container = document.querySelector(".pin_container");
 //   .then((data) =>
 //     document.addEventListener("DOMContentLoaded", showCards(data))
 
-
-fetch("https://iic3585-pwa-c4306.web.app/images")
-  .then((response) => response.json())
-  .then((data) => console.info(data));
+const fetchImages = () => {
+  console.log('fetch images');
+  fetch("https://iic3585-pwa-c4306.web.app/images")
+    .then((response) => response.json())
+    .then((data) => console.info(data));
+    document.addEventListener("DOMContentLoaded", ShowImg());
+}
 
 const ShowImg = () => {
 
-let output = "";
-for (let i = 0; i < page; i++) {
-  const size = ["card_small", "card_medium", "card_large"].sort(() => Math.random() - 0.5).slice(0, 1);
-  const element = `https://picsum.photos/id/${i}/200/300`;
-  output += `
-               <div class="card ${size}">
-                  <img src=${element} />
-               </div>
-                `;
-  
-}
-container.innerHTML = output;
+  let output = "";
+  for (let i = 0; i < page; i++) {
+    const size = ["card_small", "card_medium", "card_large"].sort(() => Math.random() - 0.5).slice(0, 1);
+    const element = `https://picsum.photos/id/${i}/200/300`;
+    output += `
+                <div class="card ${size}">
+                    <img src=${element} />
+                </div>
+                  `;
+    
+  }
+  container.innerHTML = output;
 }
 
-document.addEventListener("DOMContentLoaded", ShowImg())
+
+
