@@ -35,13 +35,9 @@ self.addEventListener('fetch', (event) => {
 // Receive a Push event
 self.addEventListener('push', (event) => {
   console.log('Received a push event', event.data.json())
-  const options = {
-    title: 'I got a message for you!',
-    body: 'Here is the body of the message'
-    // icon: '/img/icon-192x192.png',
-    // tag: 'tag-for-this-notification',
-  }
-  const promiseChain = self.registration.showNotification('title', options)
+  const data =  event.data.json()
+  console.log(data);
+  const promiseChain = self.registration.showNotification(data.title, data)
   event.waitUntil(promiseChain)
 })
 
