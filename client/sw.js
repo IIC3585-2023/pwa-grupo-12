@@ -27,25 +27,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Receive a Push event
 self.addEventListener('push', (event) => {
   console.log('Received a push event', event.data.json())

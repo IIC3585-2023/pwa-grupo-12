@@ -53,7 +53,7 @@ const askPermission = () => {
 }
 
 const sendToServer = (subscription) => {
-  return fetch('/api/subscription', {
+  return fetch('/subscription', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
