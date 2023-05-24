@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
         .then(() => {
           const options = {
             userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(APP_SERVER_KEY)
+            applicationServerKey: "BAjli4g8IZem-J1I-ha1zJJJqB_2t-Q3TPVQ9kCFzaHTUN2vUEskKurGhq7XB_rNwRRtKGtrln6tdsjmEgEg-mI"
           }
           // Subscribe the user
           return registration.pushManager.subscribe(options)
@@ -56,7 +56,8 @@ const askPermission = () => {
 }
 
 const sendToServer = (subscription) => {
-  return fetch('/subscription', {
+  console.info("body:", subscription);
+  return fetch('https://iic3585-pwa-c4306.web.app/subscription', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -64,6 +65,7 @@ const sendToServer = (subscription) => {
     body: JSON.stringify(subscription)
   })
   .then((res) => {
+    console.info("res:", res);
     if (!res.ok) {
       throw new Error('An error occurred')
     }
