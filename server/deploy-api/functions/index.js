@@ -142,7 +142,7 @@ app.get('/images', (req, res) => {
   })
   .then(() => {
     res.setHeader('Content-Type', 'application/json')
-    res.send(JSON.stringify({ data: { success: true } }))
+    res.send(JSON.stringify({ data: dataToSend }))
   })
   .catch((err) => {
     res.status(500)
